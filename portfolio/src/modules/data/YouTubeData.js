@@ -2,7 +2,7 @@
  * @Author: Thomas vanBommel
  * @Date:   2021-01-10T15:08:16-04:00
  * @Last modified by:   Thomas vanBommel
- * @Last modified time: 2021-01-10T23:34:26-04:00
+ * @Last modified time: 2021-01-11T19:50:44-04:00
  */
 import React from 'react';
 
@@ -42,14 +42,33 @@ class YouTubeData extends React.Component {
     for(var i = 0; i < this.state.videos.length; i++){
       let video = this.state.videos[i];
       let thumbnail = video.snippet.thumbnails.medium;
+      let stats = video.statistics;
+
+      let view_count = stats.viewCount > 0 ? (<td>{ stats.viewCount } views</td>) : "";
+      let like_count = stats.likeCount > 0 ? (<td>{ stats.likeCount } likes</td>) : "";
+      let dislike_count = stats.dislikeCount > 0 ? (<td>{ stats.dislikeCount } dislikes</td>) : "";
+      let comment_count = stats.commentCount > 0 ? (<td>{ stats.commentCount } comments</td>) : "";
 
       result.push((
-        <div class="col-md-4 col-sm-6 col-12 mx-auto">
+        <div class="col-md-4 col-sm-6 col-12 mx-auto text-center">
           <div class="card shadow p-2 m-2 text-nowrap overflow-hidden">
             <figure class="figure mx-auto" style={{ "max-width": "100%" }}>
               <img src={ thumbnail.url } class="figure-img img-fluid rounded" alt="thumbnail" />
-              <figcaption class="figure-caption">{ video.snippet.title }</figcaption>
+              <figcaption class="figure-caption">
+                <a href="google.ca">
+                  { video.snippet.title }
+                </a>
+              </figcaption>
             </figure>
+
+            <table class="w-100 text-muted">
+              <tr>
+                { view_count }
+                { like_count }
+                { dislike_count }
+                { comment_count }
+              </tr>
+            </table>
           </div>
         </div>
       ));
@@ -88,7 +107,6 @@ class YouTubeData extends React.Component {
               { this.state.isFetching ? "Fetching videos..." : this.videos() }
             </div>
             <div id="pagination" class="btn-group mt-3 mx-auto" style={{ width: "max-content", display: "block" }}>
-              <button class="btn btn-outline-dark" type="button">&laquo;</button>
               <button
                 class="btn btn-outline-dark"
                 type="button"
@@ -100,7 +118,6 @@ class YouTubeData extends React.Component {
 
               <button class="btn btn-outline-dark" type="button"
                 onClick={ e => { this.fetchVideos(new URLSearchParams({ page: 15 })) } }>...15</button>
-              <button class="btn btn-outline-dark" type="button">&raquo;</button>
             </div>
           </div>
         </div>

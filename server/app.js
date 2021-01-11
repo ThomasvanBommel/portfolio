@@ -2,7 +2,7 @@
  * @Author: Thomas vanBommel
  * @Date:   2021-01-10T18:29:27-04:00
  * @Last modified by:   Thomas vanBommel
- * @Last modified time: 2021-01-10T23:23:36-04:00
+ * @Last modified time: 2021-01-11T19:28:33-04:00
  */
 const youtubeVideos = require("./modules/youtube-videos")
 const config = require("./config.json");
@@ -17,12 +17,16 @@ let videos = [];
 
 app.emitter = new events.EventEmitter();
 
-youtubeVideos(config.youtube_api_key, "UCbVqDf-obg_ylZZjNp1hK7Q", (err, data, res) => {
+youtubeVideos({
+  key: config.youtube_api_key,
+  id: "UCbVqDf-obg_ylZZjNp1hK7Q"
+}, (err, data, res) => {
     if(err) return console.error(err);
 
-    console.log(res.headers);
+    videos = data;
 
-    videos = JSON.parse(data).items;
+    // console.log(videos);
+    // console.log(videos);
 
     app.emitter.emit("loaded");
 });
