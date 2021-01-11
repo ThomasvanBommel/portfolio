@@ -2,7 +2,7 @@
  * @Author: Thomas vanBommel
  * @Date:   2021-01-10T15:08:16-04:00
  * @Last modified by:   Thomas vanBommel
- * @Last modified time: 2021-01-10T20:49:05-04:00
+ * @Last modified time: 2021-01-10T23:34:26-04:00
  */
 import React from 'react';
 
@@ -14,16 +14,21 @@ class YouTubeData extends React.Component {
       isFetching: false,
       videos: []
     };
+
+    let params = new URLSearchParams(window.location.search);
+
+    this.state.page = params.get("page") ? params.get("page") : 1;
+    this.state.per_page = params.get("per_page") ? params.get("per_page") : 3;
   }
 
-  fetchVideos() {
+  fetchVideos(params="") {
     this.setState({ ...this.state, isFetching: true });
 
-    fetch("http://localhost:8000/youtube", { mode: 'cors' })
+    fetch(`http://localhost:8000/youtube?${params.toString()}`, { mode: 'cors' })
       .then(response => response.json())
       .then(data => {
-
-      this.setState({ videos: data, isFetching: false });
+      if(params) this.state.page = params.get("page");
+      this.setState({ ...this.state, videos: data, isFetching: false });
     });
   }
 
@@ -53,7 +58,27 @@ class YouTubeData extends React.Component {
     return result;
   }
 
+  pagination() {
+    let result = [];
+    let start = Math.min(Math.max(this.state.page - 1, 1), 15-2);
+
+    for(let i = start; i < start + 3; i++){
+      result.push((
+        <button
+          class="btn btn-outline-dark"
+          type="button"
+          onClick={ e => { this.fetchVideos(new URLSearchParams({ page: i })) } }
+          disabled={this.state.page == i ? true : false}>
+          { i }
+        </button>
+      ));
+    }
+
+    return result;
+  }
+
   render() {
+
     return (
       <div class="col-12">
         <div class=" rounded p-1">
@@ -64,11 +89,17 @@ class YouTubeData extends React.Component {
             </div>
             <div id="pagination" class="btn-group mt-3 mx-auto" style={{ width: "max-content", display: "block" }}>
               <button class="btn btn-outline-dark" type="button">&laquo;</button>
-              <button class="btn btn-outline-dark" type="button">0...</button>
-              <button class="btn btn-outline-dark" type="button" disabled>1</button>
-              <button class="btn btn-outline-dark" type="button">2</button>
-              <button class="btn btn-outline-dark" type="button">3</button>
-              <button class="btn btn-outline-dark" type="button">...251</button>
+              <button
+                class="btn btn-outline-dark"
+                type="button"
+                onClick={ e => { this.fetchVideos(new URLSearchParams({ page: 1 })) } }>
+                1...
+              </button>
+
+              { this.pagination() }
+
+              <button class="btn btn-outline-dark" type="button"
+                onClick={ e => { this.fetchVideos(new URLSearchParams({ page: 15 })) } }>...15</button>
               <button class="btn btn-outline-dark" type="button">&raquo;</button>
             </div>
           </div>
