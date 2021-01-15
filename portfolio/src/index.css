@@ -2,7 +2,7 @@
  * @Author: Thomas vanBommel
  * @Date:   2021-01-10T11:52:00-04:00
  * @Last modified by:   Thomas vanBommel
- * @Last modified time: 2021-01-11T19:47:44-04:00
+ * @Last modified time: 2021-01-11T20:16:00-04:00
  */
 .btn-outline-orange{
   color: #f83;
@@ -18,5 +18,5 @@
 }
 
 #pagination button:first-child, #pagination button:last-child{
-  font-size:75%;
+  /* font-size:75%; */
 }

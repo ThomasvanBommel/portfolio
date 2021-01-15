@@ -2,7 +2,7 @@
  * @Author: Thomas vanBommel
  * @Date:   2021-01-10T18:29:27-04:00
  * @Last modified by:   Thomas vanBommel
- * @Last modified time: 2021-01-11T19:28:33-04:00
+ * @Last modified time: 2021-01-11T20:34:18-04:00
  */
 const youtubeVideos = require("./modules/youtube-videos")
 const config = require("./config.json");
@@ -25,7 +25,6 @@ youtubeVideos({
 
     videos = data;
 
-    // console.log(videos);
     // console.log(videos);
 
     app.emitter.emit("loaded");
